@@ -5,9 +5,6 @@ identifier = "com.chromeless.viewer"
 [build]
 frontendDist = "../dist"
 
-[tauri.allowlist]
-http = { all = true }
-
 [[app.windows]]
 label = "main"
 title = "Chromeless Viewer"
