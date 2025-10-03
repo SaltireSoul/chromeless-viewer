@@ -58,7 +58,7 @@ jobs:
           git tag $tag
           git push origin $tag
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v1
@@ -68,4 +68,4 @@ jobs:
           files: |
             src-tauri/target/release/chromeless_viewer.exe
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GH_PAT }}
