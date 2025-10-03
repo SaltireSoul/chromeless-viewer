@@ -26,6 +26,17 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Debug dist folder
+        run: |
+          dir dist
+          dir src-tauri
+          dir src-tauri/../dist
+
+      - name: Ensure dist folder exists
+        run: |
+          mkdir dist
+          echo "<!DOCTYPE html><html><body></body></html>" > dist/index.html
+
       - name: Extract MAJOR.MINOR from Cargo.toml
         id: version
         run: |
