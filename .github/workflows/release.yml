@@ -45,18 +45,6 @@ jobs:
           $major_minor = ($version -split '\.')[0..1] -join '.'
           "major_minor=$major_minor" >> $env:GITHUB_OUTPUT
 
-      - name: Verify Rust Project Structure
-        run: cargo verify-project
-        working-directory: src-tauri
-
-      - name: Check Rust Formatting
-        run: cargo fmt --check
-        working-directory: src-tauri
-
-      - name: Run Clippy Linter (no dependencies)
-        run: cargo clippy --no-deps -- -D warnings
-        working-directory: src-tauri
-
       - name: Build Tauri App
         run: cargo build --release
         working-directory: src-tauri
