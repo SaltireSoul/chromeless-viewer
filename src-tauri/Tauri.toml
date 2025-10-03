@@ -6,7 +6,7 @@ identifier = "com.chromeless.viewer"
 devUrl = "http://localhost:3000"
 frontendDist = "../dist"
 
-[app.windows]
+[[app.windows]]
 label = "main"
 title = "Chromeless Viewer"
 width = 1600
