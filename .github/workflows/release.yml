@@ -66,6 +66,6 @@ jobs:
             Automated release for version v${{ steps.version.outputs.major_minor }}.${{ github.run_number }}.
             Built and published by GitHub Actions.
           files: |
-            target/release/chromeless_viewer.exe
+            src-tauri/target/release/chromeless-viewer.exe
         env:
           GITHUB_TOKEN: ${{ secrets.GH_PAT }}
