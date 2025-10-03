@@ -1,6 +1,6 @@
 #![cfg_attr(windows, windows_subsystem = "windows")]
 
-use tauri::{Builder, WindowBuilder, WindowUrl};
+use tauri::{Builder, Manager, window::WindowBuilder, window::Url};
 
 fn main() {
   let args: Vec<String> = std::env::args().collect();
@@ -9,16 +9,13 @@ fn main() {
 
   Builder::default()
     .setup(move |app| {
-      WindowBuilder::new(
-        app,
-        "main",
-        WindowUrl::App(redirect_url.into())
-      )
-      .title("Chromeless Viewer")
-      .inner_size(1600.0, 900.0)
-      .resizable(true)
-      .decorations(true)
-      .build()?;
+      WindowBuilder::new(app, "main")
+        .url(Url::App(redirect_url.into()))
+        .title("Chromeless Viewer")
+        .inner_size(1600.0, 900.0)
+        .resizable(true)
+        .decorations(true)
+        .build()?;
       Ok(())
     })
     .run(tauri::generate_context!())
