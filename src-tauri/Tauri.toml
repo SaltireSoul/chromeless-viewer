@@ -3,7 +3,6 @@ version = "1.0.0"
 identifier = "com.chromeless.viewer"
 
 [build]
-devUrl = ""
 frontendDist = "."
 
 [[app.windows]]
