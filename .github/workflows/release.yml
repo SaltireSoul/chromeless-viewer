@@ -45,8 +45,16 @@ jobs:
           $major_minor = ($version -split '\.')[0..1] -join '.'
           "major_minor=$major_minor" >> $env:GITHUB_OUTPUT
 
-      - name: Check Rust Code
-        run: cargo check
+      - name: Verify Rust Project Structure
+        run: cargo verify-project
+        working-directory: src-tauri
+
+      - name: Check Rust Formatting
+        run: cargo fmt --check
+        working-directory: src-tauri
+
+      - name: Run Clippy Linter (no dependencies)
+        run: cargo clippy --no-deps -- -D warnings
         working-directory: src-tauri
 
       - name: Build Tauri App
@@ -54,8 +62,9 @@ jobs:
         working-directory: src-tauri
 
       - name: Create Git Tag
+        shell: pwsh
         run: |
-          tag="v${{ steps.version.outputs.major_minor }}.${{ github.run_number }}"
+          $tag = "v${{ steps.version.outputs.major_minor }}.${{ github.run_number }}"
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
           git tag $tag
