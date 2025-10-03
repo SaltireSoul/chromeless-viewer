@@ -8,3 +8,7 @@ tauri = { version = "2", features = ["default"] }
 
 [build-dependencies]
 tauri-build = "2"
+
+[[bin]]
+name = "chromeless-viewer"
+path = "src/main.rs"
