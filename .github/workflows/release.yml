@@ -32,6 +32,9 @@ jobs:
           mkdir dist
           echo "<!DOCTYPE html><html><body></body></html>" > dist/index.html
 
+      - name: Install Tauri CLI
+        run: cargo install tauri-cli
+
       - name: Extract MAJOR.MINOR from Cargo.toml
         id: version
         run: |
@@ -42,7 +45,7 @@ jobs:
           "major_minor=$major_minor" >> $env:GITHUB_OUTPUT
 
       - name: Build Tauri App
-        run: npm run tauri
+        run: cargo tauri build
 
       - name: Create Git Tag
         run: |
