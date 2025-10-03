@@ -32,6 +32,9 @@ jobs:
           if (!(Test-Path "dist")) { mkdir dist }
           echo "<!DOCTYPE html><html><body></body></html>" > dist/index.html
 
+      - name: Set TAURI_CONFIG path
+        run: echo "TAURI_CONFIG=src-tauri/tauri.toml" >> $GITHUB_ENV
+
       - name: Extract MAJOR.MINOR from Cargo.toml
         id: version
         run: |
@@ -43,6 +46,8 @@ jobs:
 
       - name: Build Tauri App
         run: cargo build --release
+        env:
+          TAURI_CONFIG: src-tauri/tauri.toml
 
       - name: Create Git Tag
         run: |
