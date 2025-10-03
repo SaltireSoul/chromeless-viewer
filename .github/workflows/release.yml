@@ -55,9 +55,8 @@ jobs:
           $tag = "v${{ steps.version.outputs.major_minor }}.${{ github.run_number }}"
           git config user.name "github-actions"
           git config user.email "github-actions@github.com"
-          git remote set-url origin https://x-access-token:${{ secrets.GH_PAT }}@github.com/SaltireSoul/chromeless-viewer.git
           git tag $tag
-          git push origin $tag
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/SaltireSoul/chromeless-viewer.git $tag
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v1
