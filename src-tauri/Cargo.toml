@@ -5,7 +5,7 @@ edition = "2021"
 build = "build.rs"
 
 [dependencies]
-tauri = { version = "2", features = ["default", "unstable"] }
+tauri = { version = "2", features = ["default", "unstable", "eval"] }
 
 [build-dependencies]
 tauri-build = { version = "2", features = ["config-toml"] }
