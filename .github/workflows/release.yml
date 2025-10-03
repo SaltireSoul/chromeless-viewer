@@ -29,9 +29,11 @@ jobs:
       - name: Extract MAJOR.MINOR from Cargo.toml
         id: version
         run: |
-          version=$(grep '^version' src-tauri/Cargo.toml | head -n1 | cut -d '"' -f2)
-          major_minor=$(echo $version | cut -d '.' -f1,2)
-          echo "major_minor=$major_minor" >> $GITHUB_OUTPUT
+          $content = Get-Content "src-tauri/Cargo.toml"
+          $versionLine = $content | Where-Object { $_ -match '^version\s*=\s*".+"' }
+          $version = ($versionLine -split '"')[1]
+          $major_minor = ($version -split '\.')[0..1] -join '.'
+          "major_minor=$major_minor" >> $env:GITHUB_OUTPUT
 
       - name: Build Tauri App
         run: npm run tauri build
