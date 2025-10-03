@@ -3,6 +3,6 @@ Portable Tauri app that opens a URL passed as a command-line argument in a chrom
 
 ### Usage
 ```
-chromeless-viewer "https://example.com"
+chromeless-viewer "https://example.com" "My App" 1280 720 100 100
 ```
-chromeless-viewer \<URL\>
+chromeless-viewer \<URL\> \<TITLE\> \<SIZE\> \<POSITION\>
