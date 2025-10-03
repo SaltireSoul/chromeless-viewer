@@ -9,6 +9,19 @@ fn main() {
   let redirect_url = format!("index.html?url={}", url);
 
   Builder::default()
-    .run(tauri::generate_context!().with_url(WindowUrl::App(redirect_url.into())))
-    .expect("error while running tauri application");
+  .setup(|app| {
+    let window = tauri::WindowBuilder::new(
+      app,
+      "main",
+      WindowUrl::App(redirect_url.into())
+    )
+    .title("Chromeless Viewer")
+    .inner_size(1600.0, 900.0)
+    .resizable(true)
+    .decorations(true)
+    .build()?;
+    Ok(())
+  })
+  .run(tauri::generate_context!())
+  .expect("error while running tauri application");
 }
