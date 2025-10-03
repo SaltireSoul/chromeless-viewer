@@ -45,6 +45,10 @@ jobs:
           $major_minor = ($version -split '\.')[0..1] -join '.'
           "major_minor=$major_minor" >> $env:GITHUB_OUTPUT
 
+      - name: Check Rust Code
+        run: cargo check
+        working-directory: src-tauri
+
       - name: Build Tauri App
         run: cargo build --release
         working-directory: src-tauri
