@@ -3,8 +3,6 @@ name = "chromeless-viewer"
 version = "1.0.0"
 edition = "2021"
 build = "build.rs"
-# Add this to suppress console window
-windows_subsystem = "windows"
 
 [dependencies]
 tauri = { version = "2", features = ["default"] }
