@@ -33,7 +33,8 @@ jobs:
           echo "<!DOCTYPE html><html><body></body></html>" > dist/index.html
 
       - name: Set TAURI_CONFIG path
-        run: echo "TAURI_CONFIG=src-tauri/tauri.toml" >> $GITHUB_ENV
+        run: echo "TAURI_CONFIG=tauri.toml" >> $GITHUB_ENV
+        working-directory: src-tauri
 
       - name: Extract MAJOR.MINOR from Cargo.toml
         id: version
@@ -46,8 +47,7 @@ jobs:
 
       - name: Build Tauri App
         run: cargo build --release
-        env:
-          TAURI_CONFIG: src-tauri/tauri.toml
+        working-directory: src-tauri
 
       - name: Create Git Tag
         run: |

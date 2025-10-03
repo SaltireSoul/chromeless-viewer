@@ -15,4 +15,4 @@ name = "chromeless-viewer"
 path = "src/main.rs"
 
 [package.metadata.tauri]
-config = "src-tauri/tauri.toml"
+config = "tauri.toml"
