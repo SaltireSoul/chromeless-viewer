@@ -36,7 +36,7 @@ jobs:
           "major_minor=$major_minor" >> $env:GITHUB_OUTPUT
 
       - name: Build Tauri App
-        run: npm run tauri build
+        run: npm run tauri
 
       - name: Create Git Tag
         run: |
