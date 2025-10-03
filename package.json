@@ -2,7 +2,7 @@
   "name": "chromeless-viewer",
   "version": "1.0.0",
   "scripts": {
-    "tauri": "tauri"
+    "tauri": "tauri dev"
   },
   "devDependencies": {
     "@tauri-apps/cli": "^2.0.0-beta"

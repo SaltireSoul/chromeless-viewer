@@ -2,14 +2,15 @@ name: Build and Release Portable Tauri App
 
 on:
   push:
-    tags:
-      - 'v*'
+    branches:
+      - main  # or your default branch
 
 jobs:
   build:
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout Code
+        uses: actions/checkout@v3
 
       - name: Setup Rust
         uses: dtolnay/rust-toolchain@stable
@@ -25,12 +26,31 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
+      - name: Extract MAJOR.MINOR from Cargo.toml
+        id: version
+        run: |
+          version=$(grep '^version' src-tauri/Cargo.toml | head -n1 | cut -d '"' -f2)
+          major_minor=$(echo $version | cut -d '.' -f1,2)
+          echo "major_minor=$major_minor" >> $GITHUB_OUTPUT
+
       - name: Build Tauri App
         run: npm run tauri build
 
-      - name: Upload Release
+      - name: Create Git Tag
+        run: |
+          tag="v${{ steps.version.outputs.major_minor }}.${{ github.run_number }}"
+          git config user.name "github-actions"
+          git config user.email "github-actions@github.com"
+          git tag $tag
+          git push origin $tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Publish GitHub Release
         uses: softprops/action-gh-release@v1
         with:
+          tag_name: v${{ steps.version.outputs.major_minor }}.${{ github.run_number }}
+          name: Release v${{ steps.version.outputs.major_minor }}.${{ github.run_number }}
           files: |
             src-tauri/target/release/chromeless-viewer.exe
         env:
