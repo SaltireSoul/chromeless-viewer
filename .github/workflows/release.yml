@@ -27,9 +27,9 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Create dummy dist folder
+      - name: Create dist folder if missing
         run: |
-          mkdir dist
+          if (!(Test-Path "dist")) { mkdir dist }
           echo "<!DOCTYPE html><html><body></body></html>" > dist/index.html
 
       - name: Install Tauri CLI
