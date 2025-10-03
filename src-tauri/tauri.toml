@@ -3,7 +3,10 @@ version = "1.0.0"
 identifier = "com.chromeless.viewer"
 
 [build]
-devUrl = "https://localhost"
+# Remove or comment out devUrl
+# devUrl = "http://localhost"
+
+# Use the built frontend files
 frontendDist = "../dist"
 
 [[app.windows]]
