@@ -30,27 +30,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      - name: Check if dist/index.html exists
-        shell: pwsh
-        run: |
-          if (Test-Path "dist/index.html") {
-            Write-Host "? dist/index.html already exists."
-          } else {
-            Write-Host "?? dist/index.html does NOT exist."
-          }
-
-      - name: Create dist/index.html if dist is missing
-        shell: pwsh
-        run: |
-          if (-Not (Test-Path "dist")) {
-            New-Item -ItemType Directory -Path "dist"
-            $html = '<!DOCTYPE html><html><head><title>Chromeless Viewer</title><script>const url = new URLSearchParams(window.location.search).get("url") || "https://copilot.microsoft.com/";window.location.replace(url);</script></head><body><h1>Launching...</h1></body></html>'
-            Set-Content -Path "dist/index.html" -Value $html
-            Write-Host "? dist/index.html created."
-          } else {
-            Write-Host "?? dist directory already exists. Skipping creation."
-          }
-
       - name: Extract MAJOR.MINOR from Cargo.toml
         id: version
         shell: pwsh
