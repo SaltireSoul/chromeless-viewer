@@ -3,6 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <title>Chromeless Viewer</title>
+    <script>
+      const url = new URLSearchParams(window.location.search).get("url");
+      if (url) window.location.replace(url);
+    </script>
   </head>
   <body>
     <h1>Launching...</h1>

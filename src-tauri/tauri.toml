@@ -5,15 +5,6 @@ identifier = "com.chromeless.viewer"
 [build]
 frontendDist = "../dist"
 
-[[app.windows]]
-label = "main"
-url = "index.html"
-title = "Chromeless Viewer"
-width = 1600
-height = 900
-resizable = true
-decorations = true
-
 [bundle]
 active = false
 icon = ["icons/icon.ico"]

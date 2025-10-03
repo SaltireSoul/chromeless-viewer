@@ -1,19 +1,23 @@
 #![cfg_attr(windows, windows_subsystem = "windows")]
 
-use tauri::{Builder, Manager};
+use tauri::window::WindowBuilder;
 
 fn main() {
   let args: Vec<String> = std::env::args().collect();
 
   let url = args.get(1).cloned().unwrap_or_else(|| "https://copilot.microsoft.com/".to_string());
   let title = args.get(2).cloned().unwrap_or_else(|| "Chromeless Viewer".to_string());
+  let redirect_url = format!("index.html?url={}", url);
 
-  Builder::default()
+  tauri::Builder::default()
     .setup(move |app| {
-      if let Some(window) = app.get_window("main") {
-        window.set_title(&title).ok();
-        window.eval(&format!("window.location.replace('{}')", url)).ok();
-      }
+      WindowBuilder::new(app, "main")
+        .title(&title)
+        .inner_size(1600.0, 900.0)
+        .resizable(true)
+        .decorations(true)
+        .url(redirect_url)
+        .build()?;
       Ok(())
     })
     .run(tauri::generate_context!())
