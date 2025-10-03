@@ -3,8 +3,8 @@ version = "1.0.0"
 identifier = "com.chromeless.viewer"
 
 [build]
-frontendDist = "."  # assumes no frontend
-devUrl = ""         # disables dev server
+devUrl = "https://localhost"
+frontendDist = "."
 
 [[app.windows]]
 label = "main"
