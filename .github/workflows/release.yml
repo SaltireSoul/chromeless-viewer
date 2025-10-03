@@ -8,6 +8,7 @@ on:
 jobs:
   build:
     runs-on: windows-latest
+
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
@@ -26,13 +27,7 @@ jobs:
       - name: Install Dependencies
         run: npm install
 
-      - name: Debug dist folder
-        run: |
-          dir dist
-          dir src-tauri
-          dir src-tauri/../dist
-
-      - name: Ensure dist folder exists
+      - name: Create dummy dist folder
         run: |
           mkdir dist
           echo "<!DOCTYPE html><html><body></body></html>" > dist/index.html

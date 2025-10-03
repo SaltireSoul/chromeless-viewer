@@ -2,9 +2,7 @@
   "name": "chromeless-viewer",
   "version": "1.0.0",
   "scripts": {
-    "tauri": "tauri build"
+    "tauri": "cargo tauri build"
   },
-  "devDependencies": {
-    "tauri": "^2.0.0"
-  }
+  "devDependencies": {}
 }
