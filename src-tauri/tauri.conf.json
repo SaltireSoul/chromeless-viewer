@@ -1,0 +1,16 @@
+{
+  "package": {
+    "version": "1.0.0"
+  },
+  "tauri": {
+    "windows": [
+      {
+        "title": "Chromeless Viewer",
+        "width": 1600,
+        "height": 900,
+        "decorations": false,
+        "resizable": true
+      }
+    ]
+  }
+}
