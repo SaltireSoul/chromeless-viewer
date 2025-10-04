@@ -26,60 +26,84 @@ jobs:
         rustup target add x86_64-pc-windows-msvc
         cargo install tauri-cli
 
-    - name: Create Tauri App
+    - name: Create Tauri App Structure
       run: |
         mkdir tauri-app
         cd tauri-app
         cargo init --bin
 
-        # Create src/main.rs
-        echo fn main() { > src/main.rs
-        echo tauri::Builder::default() >> src/main.rs
-        echo .setup(|app| { >> src/main.rs
-        echo tauri::WindowBuilder::new( >> src/main.rs
-        echo app, "main", tauri::WindowUrl::External("${{ env.APP_URL }}".parse().unwrap()) >> src/main.rs
-        echo ).title("${{ env.APP_TITLE }}") >> src/main.rs
-        echo .inner_size(${{ env.WINDOW_WIDTH }}.parse().unwrap(), ${{ env.WINDOW_HEIGHT }}.parse().unwrap()) >> src/main.rs
-        echo .position(${{ env.WINDOW_X }}.parse().unwrap(), ${{ env.WINDOW_Y }}.parse().unwrap()) >> src/main.rs
-        echo .build()?; Ok(()) }) >> src/main.rs
-        echo .run(tauri::generate_context!()) >> src/main.rs
-        echo .expect("error while running tauri application"); } >> src/main.rs
+    - name: Create src/main.rs
+      run: |
+        Set-Content -Path tauri-app\src\main.rs -Value @"
+fn main() {
+    tauri::Builder::default()
+        .setup(|app| {
+            tauri::WindowBuilder::new(
+                app,
+                \"main\",
+                tauri::WindowUrl::External(\"${{ env.APP_URL }}\".parse().unwrap())
+            )
+            .title(\"${{ env.APP_TITLE }}\")
+            .inner_size(${{ env.WINDOW_WIDTH }}.parse().unwrap(), ${{ env.WINDOW_HEIGHT }}.parse().unwrap())
+            .position(${{ env.WINDOW_X }}.parse().unwrap(), ${{ env.WINDOW_Y }}.parse().unwrap())
+            .build()?;
+            Ok(())
+        })
+        .run(tauri::generate_context!())
+        .expect(\"error while running tauri application\");
+}
+"@
 
-        # Create Cargo.toml
-        echo [package] > Cargo.toml
-        echo name = "tauri-app" >> Cargo.toml
-        echo version = "0.1.0" >> Cargo.toml
-        echo edition = "2021" >> Cargo.toml
-        echo [dependencies] >> Cargo.toml
-        echo tauri = { version = "1", features = ["api-all"] } >> Cargo.toml
-        echo [lib] >> Cargo.toml
-        echo crate-type = ["cdylib"] >> Cargo.toml
-        echo [[bin]] >> Cargo.toml
-        echo name = "tauri-app" >> Cargo.toml
-        echo path = "src/main.rs" >> Cargo.toml
+    - name: Create Cargo.toml
+      run: |
+        Set-Content -Path tauri-app\Cargo.toml -Value @"
+[package]
+name = \"tauri-app\"
+version = \"0.1.0\"
+edition = \"2021\"
 
-        # Create .cargo/config.toml to suppress console window
-        mkdir .cargo
-        echo [target.'cfg(windows)'] > .cargo/config.toml
-        echo rustflags = ["-C", "link-args=/SUBSYSTEM:WINDOWS"] >> .cargo/config.toml
+[dependencies]
+tauri = { version = \"1\", features = [\"api-all\"] }
 
-        # Create tauri.conf.json
-        mkdir src-tauri
-        echo { > src-tauri/tauri.conf.json
-        echo "package": { "productName": "TauriApp", "version": "0.1.0" }, >> src-tauri/tauri.conf.json
-        echo "tauri": { >> src-tauri/tauri.conf.json
-        echo "windows": [ >> src-tauri/tauri.conf.json
-        echo { >> src-tauri/tauri.conf.json
-        echo "title": "${{ env.APP_TITLE }}", >> src-tauri/tauri.conf.json
-        echo "width": ${{ env.WINDOW_WIDTH }}, >> src-tauri/tauri.conf.json
-        echo "height": ${{ env.WINDOW_HEIGHT }}, >> src-tauri/tauri.conf.json
-        echo "x": ${{ env.WINDOW_X }}, >> src-tauri/tauri.conf.json
-        echo "y": ${{ env.WINDOW_Y }}, >> src-tauri/tauri.conf.json
-        echo "url": "${{ env.APP_URL }}" >> src-tauri/tauri.conf.json
-        echo } >> src-tauri/tauri.conf.json
-        echo ] >> src-tauri/tauri.conf.json
-        echo } >> src-tauri/tauri.conf.json
-        echo } >> src-tauri/tauri.conf.json
+[lib]
+crate-type = [\"cdylib\"]
+
+[[bin]]
+name = \"tauri-app\"
+path = \"src/main.rs\"
+"@
+
+    - name: Create .cargo/config.toml
+      run: |
+        mkdir tauri-app\.cargo
+        Set-Content -Path tauri-app\.cargo\config.toml -Value @"
+[target.'cfg(windows)']
+rustflags = [\"-C\", \"link-args=/SUBSYSTEM:WINDOWS\"]
+"@
+
+    - name: Create tauri.conf.json
+      run: |
+        mkdir tauri-app\src-tauri
+        Set-Content -Path tauri-app\src-tauri\tauri.conf.json -Value @"
+{
+  \"package\": {
+    \"productName\": \"TauriApp\",
+    \"version\": \"0.1.0\"
+  },
+  \"tauri\": {
+    \"windows\": [
+      {
+        \"title\": \"${{ env.APP_TITLE }}\",
+        \"width\": ${{ env.WINDOW_WIDTH }},
+        \"height\": ${{ env.WINDOW_HEIGHT }},
+        \"x\": ${{ env.WINDOW_X }},
+        \"y\": ${{ env.WINDOW_Y }},
+        \"url\": \"${{ env.APP_URL }}\"
+      }
+    ]
+  }
+}
+"@
 
     - name: Build Windows EXE
       run: |
@@ -90,4 +114,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: tauri-app-windows
-        path: tauri-app/src-tauri/target/release/tauri-app.exe
+        path: tauri-app\src-tauri\target\release\tauri-app.exe
