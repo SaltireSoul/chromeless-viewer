@@ -4,6 +4,7 @@ identifier = "com.chromeless.viewer"
 
 [build]
 frontendDist = "../dist"
+remove-unused-commands = true
 
 [[app.windows]]
 label = "main"
@@ -18,6 +19,3 @@ active = false
 icon = ["icons/icon.ico"]
 
 [plugins]
-
-[build]
-remove-unused-commands = true
