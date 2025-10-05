@@ -34,76 +34,76 @@ jobs:
 
     - name: Create src/main.rs
       run: |
-        Set-Content -Path tauri-app\src\main.rs -Value @"
+        Set-Content -Path tauri-app\src\main.rs -Value @'
 fn main() {
     tauri::Builder::default()
         .setup(|app| {
             tauri::WindowBuilder::new(
                 app,
-                \"main\",
-                tauri::WindowUrl::External(\"${{ env.APP_URL }}\".parse().unwrap())
+                "main",
+                tauri::WindowUrl::External("${{ env.APP_URL }}".parse().unwrap())
             )
-            .title(\"${{ env.APP_TITLE }}\")
+            .title("${{ env.APP_TITLE }}")
             .inner_size(${{ env.WINDOW_WIDTH }}.parse().unwrap(), ${{ env.WINDOW_HEIGHT }}.parse().unwrap())
             .position(${{ env.WINDOW_X }}.parse().unwrap(), ${{ env.WINDOW_Y }}.parse().unwrap())
             .build()?;
             Ok(())
         })
         .run(tauri::generate_context!())
-        .expect(\"error while running tauri application\");
+        .expect("error while running tauri application");
 }
-"@
+'@
 
     - name: Create Cargo.toml
       run: |
-        Set-Content -Path tauri-app\Cargo.toml -Value @"
+        Set-Content -Path tauri-app\Cargo.toml -Value @'
 [package]
-name = \"tauri-app\"
-version = \"0.1.0\"
-edition = \"2021\"
+name = "tauri-app"
+version = "0.1.0"
+edition = "2021"
 
 [dependencies]
-tauri = { version = \"1\", features = [\"api-all\"] }
+tauri = { version = "1", features = ["api-all"] }
 
 [lib]
-crate-type = [\"cdylib\"]
+crate-type = ["cdylib"]
 
 [[bin]]
-name = \"tauri-app\"
-path = \"src/main.rs\"
-"@
+name = "tauri-app"
+path = "src/main.rs"
+'@
 
     - name: Create .cargo/config.toml
       run: |
         mkdir tauri-app\.cargo
-        Set-Content -Path tauri-app\.cargo\config.toml -Value @"
+        Set-Content -Path tauri-app\.cargo\config.toml -Value @'
 [target.'cfg(windows)']
-rustflags = [\"-C\", \"link-args=/SUBSYSTEM:WINDOWS\"]
-"@
+rustflags = ["-C", "link-args=/SUBSYSTEM:WINDOWS"]
+'@
 
     - name: Create tauri.conf.json
       run: |
         mkdir tauri-app\src-tauri
-        Set-Content -Path tauri-app\src-tauri\tauri.conf.json -Value @"
+        Set-Content -Path tauri-app\src-tauri\tauri.conf.json -Value @'
 {
-  \"package\": {
-    \"productName\": \"TauriApp\",
-    \"version\": \"0.1.0\"
+  "package": {
+    "productName": "TauriApp",
+    "version": "0.1.0"
   },
-  \"tauri\": {
-    \"windows\": [
+  "tauri": {
+    "windows": [
       {
-        \"title\": \"${{ env.APP_TITLE }}\",
-        \"width\": ${{ env.WINDOW_WIDTH }},
-        \"height\": ${{ env.WINDOW_HEIGHT }},
-        \"x\": ${{ env.WINDOW_X }},
-        \"y\": ${{ env.WINDOW_Y }},
-        \"url\": \"${{ env.APP_URL }}\"
+        "title": "${{ env.APP_TITLE }}",
+        "width": ${{ env.WINDOW_WIDTH }},
+        "height": ${{ env.WINDOW_HEIGHT }},
+        "x": ${{ env.WINDOW_X }},
+        "y": ${{ env.WINDOW_Y }},
+        "url": "${{ env.APP_URL }}"
       }
     ]
   }
 }
-"@
+'@
 
     - name: Build Windows EXE
       run: |
