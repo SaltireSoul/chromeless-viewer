@@ -1,17 +1,15 @@
-#![cfg_attr(windows, windows_subsystem = "windows")]
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{Manager, Builder};
+use tauri::{Builder, Manager};
 
 fn main() {
-  let args: Vec<String> = std::env::args().collect();
-  let url = args.get(1).unwrap_or(&"https://copilot.microsoft.com/".to_string());
-
   Builder::default()
-    .setup(move |app| {
+    .setup(|app| {
       let window = app.get_webview_window("main").unwrap();
-      window.eval(&format!("window.location.replace('{}')", url)).unwrap();
+      window.eval("window.location.replace('https://copilot.microsoft.com/')").unwrap();
       Ok(())
     })
-    .run(tauri::generate_context!())
-    .expect("error while running tauri application");
+    .build(tauri::generate_context!())
+    .expect("error while running tauri application")
+    .run();
 }
