@@ -12,9 +12,6 @@ serde_json = "1"
 [build-dependencies]
 tauri-build = { version = "2", features = ["config-toml"] }
 
-[lib]
-crate-type = ["cdylib"]
-
 [[bin]]
 name = "chromeless-viewer"
 path = "src-tauri/main.rs"
