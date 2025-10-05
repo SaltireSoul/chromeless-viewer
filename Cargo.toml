@@ -19,6 +19,3 @@ path = "src-tauri/main.rs"
 
 [package.metadata.tauri]
 config = "src-tauri/tauri.toml"
-
-[package.metadata.windows]
-subsystem = "windows"

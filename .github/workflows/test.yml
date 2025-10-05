@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-  workflow_dispatch: # Manual trigger only
+  workflow_dispatch:
 
 jobs:
   build:
@@ -19,6 +19,12 @@ jobs:
         with:
           toolchain: stable
 
+      - name: Install Rust targets
+        run: rustup target add x86_64-pc-windows-msvc
+
+      - name: Clean build artifacts
+        run: cargo clean
+
       - name: Cache Cargo registry
         uses: actions/cache@v4.3.0
         with:
@@ -30,12 +36,6 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-cargo-
 
-      - name: Update Rust Dependencies
-        run: cargo update
-
-      - name: Remove Cargo.lock to force fresh dependency resolution
-        run: rm Cargo.lock
-
       - name: Build Tauri App
         run: cargo build --release
 
@@ -43,4 +43,4 @@ jobs:
         uses: actions/upload-artifact@v4.6.2
         with:
           name: tauri-app-windows
-          path: src-tauri\target\release\chromeless-viewer.exe
+          path: target/release/chromeless-viewer.exe
