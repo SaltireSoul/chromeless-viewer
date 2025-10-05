@@ -1,7 +1,10 @@
 name: Build Windows Tauri App and Upload Artifact
 
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main
+  workflow_dispatch: # Manual trigger only
 
 jobs:
   build-and-upload:
@@ -22,7 +25,7 @@ jobs:
     - name: Build Windows EXE
       shell: pwsh
       run: |
-        cargo tauri build --release
+        cargo tauri build -- --release
 
     - name: Upload EXE as GitHub Artifact
       uses: actions/upload-artifact@v4
