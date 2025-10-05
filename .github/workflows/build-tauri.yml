@@ -22,7 +22,7 @@ jobs:
     - name: Build Windows EXE
       shell: pwsh
       run: |
-        cargo tauri build
+        cargo tauri build --release
 
     - name: Upload EXE as GitHub Artifact
       uses: actions/upload-artifact@v4
