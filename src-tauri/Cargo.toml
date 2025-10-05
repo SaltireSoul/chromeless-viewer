@@ -2,10 +2,10 @@
 name = "chromeless-viewer"
 version = "1.0.0"
 edition = "2021"
-build = "src-tauri/build.rs"
+build = "build.rs"
 
 [dependencies]
-tauri = { version = "2", features = ["default", "unstable"] }
+tauri = { version = "2", features = ["default"] }
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
 
@@ -14,7 +14,7 @@ tauri-build = { version = "2", features = ["config-toml"] }
 
 [[bin]]
 name = "chromeless-viewer"
-path = "src-tauri/src/main.rs"
+path = "src/main.rs"
 
 [package.metadata.tauri]
-config = "src-tauri/tauri.toml"
+config = "tauri.toml"

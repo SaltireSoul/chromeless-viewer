@@ -1,19 +1,15 @@
-#![cfg_attr(windows, windows_subsystem = "windows")]
+#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 
-use tauri::{Builder, Manager};
+use tauri::{Manager, Builder};
 
 fn main() {
   let args: Vec<String> = std::env::args().collect();
-
-  // Use owned Strings to avoid borrowing issues
-  let url = args.get(1).cloned().unwrap_or_else(|| "https://copilot.microsoft.com/".to_string());
-  let title = args.get(2).cloned().unwrap_or_else(|| "Chromeless Viewer".to_string());
+  let url = args.get(1).unwrap_or(&"https://copilot.microsoft.com/".to_string());
 
   Builder::default()
     .setup(move |app| {
-      if let Some(window) = app.get_window("main") {
-        window.set_title(&title).ok();
-      }
+      let window = app.get_window("main").unwrap();
+      window.eval(&format!("window.location.replace('{}')", url)).unwrap();
       Ok(())
     })
     .run(tauri::generate_context!())

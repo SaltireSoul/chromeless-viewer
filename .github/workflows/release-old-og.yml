@@ -1,10 +1,9 @@
-name: Build and Tag n Release Portable Tauri App
+name: OG Build
 
 on:
-#   push:
-#     branches:
-#       - main
-  workflow_dispatch: # Manual trigger only
+  push:
+    branches:
+      - main
 
 jobs:
   build:
@@ -14,39 +13,37 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
 
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@v1
-        with:
-          toolchain: stable
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
 
-      - name: Cache Cargo registry
-        uses: actions/cache@v4.3.0
+      - name: Cache Rust
+        uses: swatinem/rust-cache@v2
+
+      - name: Install Node
+        uses: actions/setup-node@v4
         with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('src-tauri/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
+          node-version: '18'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Create dist folder if missing
+        run: |
+          if (!(Test-Path "dist")) { mkdir dist }
+          echo "<!DOCTYPE html><html><body></body></html>" > dist/index.html
+
+      - name: Set TAURI_CONFIG path
+        run: echo "TAURI_CONFIG=tauri.toml" >> $GITHUB_ENV
+        working-directory: src-tauri
 
       - name: Extract MAJOR.MINOR from Cargo.toml
         id: version
-        shell: pwsh
         run: |
           $content = Get-Content "src-tauri/Cargo.toml"
           $versionLine = $content | Where-Object { $_ -match '^version\s*=\s*".+"' }
           $version = ($versionLine -split '"')[1]
           $major_minor = ($version -split '\.')[0..1] -join '.'
-          echo "major_minor=$major_minor" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
-
-      - name: Update Rust Dependencies
-        run: cargo update
-        working-directory: src-tauri
-
-      - name: Remove Cargo.lock to force fresh dependency resolution
-        run: rm Cargo.lock
-        working-directory: src-tauri
+          "major_minor=$major_minor" >> $env:GITHUB_OUTPUT
 
       - name: Build Tauri App
         run: cargo build --release

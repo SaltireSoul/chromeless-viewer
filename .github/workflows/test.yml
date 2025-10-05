@@ -1,9 +1,9 @@
-name: Build and Release Portable Tauri App
+name: Test Build
 
 on:
-  push:
-    branches:
-      - main
+#   push:
+#     branches:
+#       - main
   workflow_dispatch:
 
 jobs:
