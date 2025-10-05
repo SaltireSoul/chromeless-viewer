@@ -44,7 +44,7 @@ fn main() {
     };
 
     Builder::default()
-        .setup(|app| {
+        .setup(move |app| {
             WebviewWindowBuilder::new(app, "main", WebviewUrl::External(config.url.parse().unwrap()))
                 .title(&config.title)
                 .inner_size(config.width.into(), config.height.into())
