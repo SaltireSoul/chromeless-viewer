@@ -4,7 +4,7 @@
   "identifier": "com.chromeless.viewer",
   "build": {
     "devUrl": "https://tauri.app",
-    "frontendDist": "."
+    "frontendDist": "./dist"
   },
   "app": {
     "windows": [
