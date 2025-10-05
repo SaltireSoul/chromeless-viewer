@@ -1,4 +1,4 @@
-#![cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
+#![cfg_attr(windows, windows_subsystem = "windows")]
 
 use tauri::{Manager, Builder};
 
@@ -8,7 +8,7 @@ fn main() {
 
   Builder::default()
     .setup(move |app| {
-      let window = app.get_window("main").unwrap();
+      let window = app.get_webview_window("main").unwrap();
       window.eval(&format!("window.location.replace('{}')", url)).unwrap();
       Ok(())
     })

@@ -1,9 +1,10 @@
 name: OG Build
 
 on:
-  push:
-    branches:
-      - main
+#   push:
+#     branches:
+#       - main
+  workflow_dispatch: # Manual trigger only
 
 jobs:
   build:
