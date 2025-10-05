@@ -26,6 +26,7 @@ jobs:
 
       - name: Clean Build Artifacts
         run: cargo clean
+        working-directory: src-tauri
 
       - name: Build Tauri App
         run: cargo build --release
