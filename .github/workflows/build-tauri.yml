@@ -1,4 +1,4 @@
-name: NEW Build Windows Tauri App and Upload Artifact
+name: Slow Alt - Build Windows Tauri App and Upload Artifact
 
 on:
 #   push:

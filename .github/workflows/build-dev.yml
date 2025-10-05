@@ -1,4 +1,4 @@
-name: Build and Release Portable Tauri App
+name: Dev - Build and Upload Artifact Portable Tauri App
 
 on:
   push:

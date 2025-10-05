@@ -1,9 +1,9 @@
-name: Build and Tag n Release Portable Tauri App
+name: Build, Tag and Release Portable Tauri App
 
 on:
-#   push:
-#     branches:
-#       - main
+  push:
+    branches:
+      - main
   workflow_dispatch: # Manual trigger only
 
 jobs:
@@ -12,23 +12,17 @@ jobs:
 
     steps:
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up Rust
-        uses: dtolnay/rust-toolchain@v1
-        with:
-          toolchain: stable
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
 
-      - name: Cache Cargo registry
-        uses: actions/cache@v4.3.0
-        with:
-          path: |
-            ~/.cargo/registry
-            ~/.cargo/git
-            target
-          key: ${{ runner.os }}-cargo-${{ hashFiles('src-tauri/Cargo.lock') }}
-          restore-keys: |
-            ${{ runner.os }}-cargo-
+      - name: Cache Rust
+        uses: swatinem/rust-cache@v2
+
+      - name: Set TAURI_CONFIG path
+        run: echo "TAURI_CONFIG=tauri.toml" >> $GITHUB_ENV
+        working-directory: src-tauri
 
       - name: Extract MAJOR.MINOR from Cargo.toml
         id: version
@@ -40,12 +34,8 @@ jobs:
           $major_minor = ($version -split '\.')[0..1] -join '.'
           echo "major_minor=$major_minor" | Out-File -FilePath $env:GITHUB_OUTPUT -Append
 
-      - name: Update Rust Dependencies
-        run: cargo update
-        working-directory: src-tauri
-
-      - name: Remove Cargo.lock to force fresh dependency resolution
-        run: rm Cargo.lock
+      - name: Clean Build Artifacts
+        run: cargo clean
         working-directory: src-tauri
 
       - name: Build Tauri App
@@ -60,8 +50,15 @@ jobs:
           tag="v${{ steps.version.outputs.major_minor }}.${{ github.run_number }}"
           gh release create "$tag" --title "$tag" --notes "Automated release"
 
+      - name: Compress binary with UPX
+        shell: pwsh
+        run: |
+          Invoke-WebRequest -Uri "https://github.com/upx/upx/releases/download/v4.2.1/upx-4.2.1-win64.zip" -OutFile "upx.zip"
+          Expand-Archive -Path "upx.zip" -DestinationPath "upx"
+          .\upx\upx-4.2.1-win64\upx.exe --best --lzma src-tauri\target\release\chromeless-viewer.exe
+
       - name: Publish GitHub Release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2.3.4
         with:
           tag_name: v${{ steps.version.outputs.major_minor }}.${{ github.run_number }}
           name: Release v${{ steps.version.outputs.major_minor }}.${{ github.run_number }}
