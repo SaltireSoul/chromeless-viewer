@@ -1,3 +1,5 @@
+#![cfg_attr(windows, windows_subsystem = "windows")]
+
 use std::fs;
 use serde::Deserialize;
 
@@ -12,7 +14,16 @@ struct Config {
 }
 
 fn main() {
-    let config: Config = serde_json::from_str(&fs::read_to_string("config.json").unwrap()).unwrap();
+    let config: Config = match fs::read_to_string("config.json")
+        .ok()
+        .and_then(|s| serde_json::from_str(&s).ok()) {
+            Some(cfg) => cfg,
+            None => {
+                eprintln!("Failed to load config.json");
+                return;
+            }
+    };
+
 
     tauri::Builder::default()
         .setup(|app| {

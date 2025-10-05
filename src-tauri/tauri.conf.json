@@ -1,20 +1,17 @@
 {
+  "productName": "ChromelessViewer",
+  "version": "1.0.0",
+  "identifier": "com.chromeless.viewer",
   "build": {
-    "devPath": "https://tauri.app",
-    "distDir": "."
+    "devUrl": "https://tauri.app",
+    "frontendDist": "."
   },
-  "package": {
-    "productName": "ChromelessViewer",
-    "version": "1.0.0"
-  },
-  "tauri": {
-    "identifier": "com.chromeless.viewer",
+  "app": {
     "windows": [
       {
         "title": "ChromelessViewer",
         "width": 800,
         "height": 600,
-        "url": "https://tauri.app",
         "resizable": true,
         "decorations": true
       }
