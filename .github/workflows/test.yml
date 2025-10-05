@@ -41,7 +41,6 @@ jobs:
 
       - name: Build Tauri App
         run: cargo tauri build -- --release
-        working-directory: src-tauri
 
       - name: Upload EXE as GitHub Artifact
         uses: actions/upload-artifact@v4.6.2
