@@ -1,0 +1,16 @@
+{
+  "package": {
+    "productName": "TauriApp",
+    "version": "0.1.0"
+  },
+  "tauri": {
+    "windows": [
+      {
+        "title": "TauriApp",
+        "width": 800,
+        "height": 600,
+        "url": "https://tauri.app"
+      }
+    ]
+  }
+}

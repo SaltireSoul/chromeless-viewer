@@ -1,0 +1,31 @@
+name: Build Windows Tauri App and Upload Artifact
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-upload:
+    runs-on: windows-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Install Rust & Tauri CLI
+      shell: pwsh
+      run: |
+        rustup update stable
+        rustup default stable
+        rustup target add x86_64-pc-windows-msvc
+        cargo install tauri-cli
+
+    - name: Build Windows EXE
+      shell: pwsh
+      run: |
+        cargo tauri build --bundles none
+
+    - name: Upload EXE as GitHub Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: tauri-app-windows
+        path: src-tauri\target\release\tauri-app.exe
