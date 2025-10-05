@@ -1,0 +1,35 @@
+name: Build and Release Portable Tauri App
+
+on:
+  push:
+    branches:
+      - dev
+  workflow_dispatch: # Manual trigger only
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Setup Rust
+        uses: dtolnay/rust-toolchain@stable
+
+      - name: Cache Rust
+        uses: swatinem/rust-cache@v2
+
+      - name: Set TAURI_CONFIG path
+        run: echo "TAURI_CONFIG=tauri.toml" >> $GITHUB_ENV
+        working-directory: src-tauri
+
+      - name: Build Tauri App
+        run: cargo build --release
+        working-directory: src-tauri
+
+      - name: Upload EXE as GitHub Artifact
+        uses: actions/upload-artifact@v4.6.2
+        with:
+          name: tauri-app-windows
+          path: src-tauri/target/release/chromeless-viewer.exe
