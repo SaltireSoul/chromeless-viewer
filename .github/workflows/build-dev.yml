@@ -24,6 +24,9 @@ jobs:
         run: echo "TAURI_CONFIG=tauri.toml" >> $GITHUB_ENV
         working-directory: src-tauri
 
+      - name: Clean Build Artifacts
+        run: cargo clean
+
       - name: Build Tauri App
         run: cargo build --release
         working-directory: src-tauri

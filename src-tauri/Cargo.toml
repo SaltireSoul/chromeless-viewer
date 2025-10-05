@@ -18,3 +18,10 @@ path = "src/main.rs"
 
 [package.metadata.tauri]
 config = "tauri.toml"
+
+[profile.release]
+codegen-units = 1         # Better optimization at the cost of compile time
+lto = true                # Enables link-time optimization
+opt-level = "s"           # Optimize for size ("z" is even smaller, "3" is for speed)
+panic = "abort"           # Removes panic unwinding code
+strip = true              # Removes debug symbols
