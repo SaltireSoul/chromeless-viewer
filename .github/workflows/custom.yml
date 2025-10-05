@@ -35,17 +35,32 @@ jobs:
     - name: Create src/main.rs
       run: |
         Set-Content -Path tauri-app\src\main.rs -Value @'
+use std::fs;
+use serde::Deserialize;
+
+#[derive(Deserialize)]
+struct Config {
+    url: String,
+    title: String,
+    width: u32,
+    height: u32,
+    x: i32,
+    y: i32,
+}
+
 fn main() {
+    let config: Config = serde_json::from_str(&fs::read_to_string("config.json").unwrap()).unwrap();
+
     tauri::Builder::default()
         .setup(|app| {
             tauri::WindowBuilder::new(
                 app,
                 "main",
-                tauri::WindowUrl::External("${{ env.APP_URL }}".parse().unwrap())
+                tauri::WindowUrl::External(config.url.parse().unwrap())
             )
-            .title("${{ env.APP_TITLE }}")
-            .inner_size(${{ env.WINDOW_WIDTH }}.parse().unwrap(), ${{ env.WINDOW_HEIGHT }}.parse().unwrap())
-            .position(${{ env.WINDOW_X }}.parse().unwrap(), ${{ env.WINDOW_Y }}.parse().unwrap())
+            .title(&config.title)
+            .inner_size(config.width, config.height)
+            .position(config.x, config.y)
             .build()?;
             Ok(())
         })
@@ -64,6 +79,8 @@ edition = "2021"
 
 [dependencies]
 tauri = { version = "1", features = ["api-all"] }
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
 
 [lib]
 crate-type = ["cdylib"]
@@ -93,15 +110,26 @@ rustflags = ["-C", "link-args=/SUBSYSTEM:WINDOWS"]
   "tauri": {
     "windows": [
       {
-        "title": "${{ env.APP_TITLE }}",
-        "width": ${{ env.WINDOW_WIDTH }},
-        "height": ${{ env.WINDOW_HEIGHT }},
-        "x": ${{ env.WINDOW_X }},
-        "y": ${{ env.WINDOW_Y }},
-        "url": "${{ env.APP_URL }}"
+        "title": "TauriApp",
+        "width": 800,
+        "height": 600,
+        "url": "https://tauri.app"
       }
     ]
   }
+}
+'@
+
+    - name: Create config.json
+      run: |
+        Set-Content -Path tauri-app\config.json -Value @'
+{
+  "url": "${{ env.APP_URL }}",
+  "title": "${{ env.APP_TITLE }}",
+  "width": ${{ env.WINDOW_WIDTH }},
+  "height": ${{ env.WINDOW_HEIGHT }},
+  "x": ${{ env.WINDOW_X }},
+  "y": ${{ env.WINDOW_Y }}
 }
 '@
 
