@@ -1,12 +1,12 @@
 {
   "package": {
-    "productName": "TauriApp",
+    "productName": "ChromelessViewer",
     "version": "0.1.0"
   },
   "tauri": {
     "windows": [
       {
-        "title": "TauriApp",
+        "title": "ChromelessViewer",
         "width": 800,
         "height": 600,
         "url": "https://tauri.app"

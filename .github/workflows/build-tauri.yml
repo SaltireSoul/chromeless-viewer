@@ -28,4 +28,4 @@ jobs:
       uses: actions/upload-artifact@v4
       with:
         name: tauri-app-windows
-        path: src-tauri\target\release\tauri-app.exe
+        path: src-tauri\target\release\chromeless-viewer.exe

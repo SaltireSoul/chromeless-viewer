@@ -1,8 +1,14 @@
 # chromeless-viewer
 Portable Tauri app that opens a URL passed as a command-line argument in a chromeless window
 
-### Usage
+### Config.json
+```json
+{
+  "url": "https://example.com",
+  "title": "My Tauri App",
+  "width": 800,
+  "height": 600,
+  "x": 100,
+  "y": 100
+}
 ```
-chromeless-viewer "https://example.com" "My App"
-```
-chromeless-viewer \<URL\> \<TITLE\>
