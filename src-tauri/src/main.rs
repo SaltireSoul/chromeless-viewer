@@ -49,6 +49,8 @@ fn main() {
                 .title(&config.title)
                 .inner_size(config.width.into(), config.height.into())
                 .position(config.x.into(), config.y.into())
+                .resizable(true)
+                .decorations(true)
                 .build()?;
             Ok(())
         })
