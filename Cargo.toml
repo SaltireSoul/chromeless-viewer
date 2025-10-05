@@ -3,6 +3,7 @@ name = "chromeless-viewer"
 version = "1.0.0"
 edition = "2021"
 build = "build.rs"
+default-run = "chromeless-viewer"
 
 [dependencies]
 tauri = "2"
@@ -18,3 +19,6 @@ path = "src-tauri/main.rs"
 
 [package.metadata.tauri]
 config = "src-tauri/tauri.toml"
+
+[package.metadata.windows]
+subsystem = "windows"
