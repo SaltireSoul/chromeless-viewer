@@ -2,7 +2,7 @@
 
 use std::{env, fs};
 use serde::Deserialize;
-use tauri::{Builder, Manager, window::WindowBuilder, window::WindowUrl};
+use tauri::{Builder, webview::WebviewWindowBuilder, webview::WebviewWindowUrl};
 
 #[derive(Deserialize)]
 struct Config {
@@ -45,9 +45,9 @@ fn main() {
 
     Builder::default()
         .setup(|app| {
-            WindowBuilder::new(app, "main")
+            WebviewWindowBuilder::new(app, "main")
                 .title(&config.title)
-                .url(WindowUrl::External(config.url.parse().unwrap()))
+                .url(WebviewWindowUrl::External(config.url.parse().unwrap()))
                 .inner_size(config.width.into(), config.height.into())
                 .position(config.x.into(), config.y.into())
                 .build()?;
