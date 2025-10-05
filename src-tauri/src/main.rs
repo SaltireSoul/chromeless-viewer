@@ -2,6 +2,7 @@
 
 use std::{env, fs};
 use serde::Deserialize;
+use tauri::{Builder, Manager, window::WindowBuilder, window::WindowUrl};
 
 #[derive(Deserialize)]
 struct Config {
@@ -42,17 +43,14 @@ fn main() {
             }
     };
 
-    tauri::Builder::default()
+    Builder::default()
         .setup(|app| {
-            tauri::WindowBuilder::new(
-                app,
-                "main",
-                tauri::WindowUrl::External(config.url.parse().unwrap())
-            )
-            .title(&config.title)
-            .inner_size(config.width, config.height)
-            .position(config.x, config.y)
-            .build()?;
+            WindowBuilder::new(app, "main")
+                .title(&config.title)
+                .url(WindowUrl::External(config.url.parse().unwrap()))
+                .inner_size(config.width.into(), config.height.into())
+                .position(config.x.into(), config.y.into())
+                .build()?;
             Ok(())
         })
         .build(tauri::generate_context!())
