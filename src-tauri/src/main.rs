@@ -2,17 +2,16 @@
 
 use std::{env, fs};
 use serde::Deserialize;
-// Added Size and Position types for Tauri window configuration
-use tauri::{Builder, WebviewUrl, webview::WebviewWindowBuilder, Size, LogicalSize, Position, LogicalPosition};
+use tauri::{Builder, WebviewUrl, webview::WebviewWindowBuilder};
 
 #[derive(Deserialize)]
 struct Config {
     url: String,
     title: String,
-    width: f64,  // Changed to f64 to match standard LogicalSize primitives
-    height: f64, // Changed to f64
-    x: f64,      // Changed to f64 to match standard LogicalPosition primitives
-    y: f64,      // Changed to f64
+    width: u32,
+    height: u32,
+    x: i32,
+    y: i32,
 }
 
 fn main() {
@@ -33,21 +32,20 @@ fn main() {
                 Config {
                     url: args[0].clone(),
                     title: args[1].clone(),
-                    // Fixed indices to step sequentially: 2, 3, 4, 5
-                    width: args.get(2).and_then(|s| s.parse().ok()).unwrap_or(1600.0),
-                    height: args.get(3).and_then(|s| s.parse().ok()).unwrap_or(900.0),
-                    x: args.get(4).and_then(|s| s.parse().ok()).unwrap_or(480.0),
-                    y: args.get(5).and_then(|s| s.parse().ok()).unwrap_or(253.0),
+                    width: args.get(2).and_then(|s| s.parse().ok()).unwrap_or(1600),
+                    height: args.get(3).and_then(|s| s.parse().ok()).unwrap_or(900),
+                    x: args.get(4).and_then(|s| s.parse().ok()).unwrap_or(480),
+                    y: args.get(5).and_then(|s| s.parse().ok()).unwrap_or(253),
                 }
             } else {
                 // 4. Ultimate Fallback: Default values
                 Config {
                     url: "https://copilot.microsoft.com/".to_string(),
                     title: "Copilot".to_string(),
-                    width: 1600.0,
-                    height: 900.0,
-                    x: 480.0,
-                    y: 253.0,
+                    width: 1600,
+                    height: 900,
+                    x: 480,
+                    y: 253,
                 }
             }
         });
@@ -61,9 +59,8 @@ fn main() {
 
             WebviewWindowBuilder::new(app, "main", WebviewUrl::External(target_url))
                 .title(&config.title)
-                // Corrected: Wrapped sizes and positions into standard Tauri structures
-                .inner_size(Size::Logical(LogicalSize::new(config.width, config.height)))
-                .position(Position::Logical(LogicalPosition::new(config.x, config.y)))
+                .inner_size(config.width.into(), config.height.into())
+                .position(config.x.into(), config.y.into())
                 .resizable(true)
                 .decorations(true)
                 .build()?;
