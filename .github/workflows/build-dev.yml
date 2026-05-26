@@ -1,9 +1,6 @@
 name: Dev - Build and Upload Artifact Portable Tauri App
 
 on:
-  push:
-    branches:
-      - dev
   workflow_dispatch: # Manual trigger only
 
 jobs:

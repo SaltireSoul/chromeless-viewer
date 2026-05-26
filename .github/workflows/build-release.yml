@@ -1,9 +1,9 @@
 name: Build, Tag and Release Portable Tauri App
 
 on:
-  push:
-    branches:
-      - main
+  # push:
+  #   branches:
+  #     - main
   workflow_dispatch: # Manual trigger only
 
 jobs:
@@ -53,9 +53,9 @@ jobs:
       - name: Compress binary with UPX
         shell: pwsh
         run: |
-          Invoke-WebRequest -Uri "https://github.com/upx/upx/releases/download/v4.2.1/upx-4.2.1-win64.zip" -OutFile "upx.zip"
+          Invoke-WebRequest -Uri "https://github.com/upx/upx/releases/download/v5.1.1/upx-5.1.1-win64.zip" -OutFile "upx.zip"
           Expand-Archive -Path "upx.zip" -DestinationPath "upx"
-          .\upx\upx-4.2.1-win64\upx.exe --best --lzma src-tauri\target\release\chromeless-viewer.exe
+          .\upx\upx-5.1.1-win64\upx.exe --best --lzma src-tauri\target\release\chromeless-viewer.exe
 
       - name: Publish GitHub Release
         uses: softprops/action-gh-release@v2.3.4
